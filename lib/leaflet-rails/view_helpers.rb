@@ -1,4 +1,3 @@
-require 'active_support/inflector'
 module Leaflet
   module ViewHelpers
 
@@ -9,29 +8,17 @@ module Leaflet
       options[:subdomains] ||= Leaflet.subdomains
       options[:container_id] ||= 'map'
 
-      tile_layer = options.delete(:tile_layer) || Leaflet.tile_layer
-      attribution = options.delete(:attribution) || Leaflet.attribution
-      max_zoom = options.delete(:max_zoom) || Leaflet.max_zoom
-      container_id = options.delete(:container_id) || 'map'
-      no_container = options.delete(:no_container)
-      center = options.delete(:center)
-      markers = options.delete(:markers)
-      circles = options.delete(:circles)
-      polylines = options.delete(:polylines)
-      fitbounds = options.delete(:fitbounds)
-
-
       output = []
-      output << "<div id='#{container_id}'></div>" unless no_container
+      output << "<div id='#{options[:container_id]}'></div>" unless options[:no_container]
       output << "<script>"
-      output << "var map = L.map('#{container_id}')"
+      output << "var map = L.map('#{options[:container_id]}')"
 
-      if center
-        output << "map.setView([#{center[:latlng][0]}, #{center[:latlng][1]}], #{center[:zoom]})"
+      if options[:center]
+        output << "map.setView([#{options[:center][:latlng][0]}, #{options[:center][:latlng][1]}], #{options[:center][:zoom]})"
       end
 
-      if markers
-        markers.each_with_index do |marker, index|
+      if options[:markers]
+        options[:markers].each_with_index do |marker, index|
           if marker[:icon]
             icon_settings = prep_icon_settings(marker[:icon])
             output << "var #{icon_settings[:name]}#{index} = L.icon({iconUrl: '#{icon_settings[:icon_url]}', shadowUrl: '#{icon_settings[:shadow_url]}', iconSize: #{icon_settings[:icon_size]}, shadowSize: #{icon_settings[:shadow_size]}, iconAnchor: #{icon_settings[:icon_anchor]}, shadowAnchor: #{icon_settings[:shadow_anchor]}, popupAnchor: #{icon_settings[:popup_anchor]}})"
@@ -45,8 +32,8 @@ module Leaflet
         end
       end
 
-      if circles
-        circles.each do |circle|
+      if options[:circles]
+        options[:circles].each do |circle|
           output << "L.circle(['#{circle[:latlng][0]}', '#{circle[:latlng][1]}'], #{circle[:radius]}, {
            color: '#{circle[:color]}',
            fillColor: '#{circle[:fillColor]}',
@@ -55,8 +42,8 @@ module Leaflet
         end
       end
 
-      if polylines
-         polylines.each do |polyline|
+      if options[:polylines]
+         options[:polylines].each do |polyline|
            _output = "L.polyline(#{polyline[:latlngs]}"
            _output << "," + polyline[:options].to_json if polyline[:options]
            _output << ").addTo(map);"
@@ -64,22 +51,16 @@ module Leaflet
          end
       end
 
-      if fitbounds
-        output << "map.fitBounds(L.latLngBounds(#{fitbounds}));"
+      if options[:fitbounds]
+        output << "map.fitBounds(L.latLngBounds(#{options[:fitbounds]}));"
       end
 
-      output << "L.tileLayer('#{tile_layer}', {
-          attribution: '#{attribution}',
-          maxZoom: #{max_zoom},"
-      
-      if options[:subdomains]
-        output << "    subdomains: #{options[:subdomains]},"
-        options.delete( :subdomains )
-      end
-
-      options.each do |key, value|
-        output << "#{key.to_s.camelize(:lower)}: '#{value}',"
-      end
+      output << "L.tileLayer('#{options[:tile_layer]}', {
+          attribution: '#{options[:attribution]}',
+          maxZoom: #{options[:max_zoom]},"
+        if options[:subdomains]
+          output << "    subdomains: #{options[:subdomains]},"
+        end
       output << "}).addTo(map)"
 
       output << "</script>"
@@ -99,5 +80,4 @@ module Leaflet
       return settings
     end
   end
-
 end
