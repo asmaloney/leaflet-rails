@@ -11,7 +11,8 @@ module Leaflet
       output = []
       output << "<div id='#{options[:container_id]}'></div>" unless options[:no_container]
       output << "<script>"
-      output << "var map = L.map('#{options[:container_id]}')"
+      output << "(function( L ) {"
+      output << "var map = L.map('#{options[:container_id]}'), marker"
 
       if options[:center]
         output << "map.setView([#{options[:center][:latlng][0]}, #{options[:center][:latlng][1]}], #{options[:center][:zoom]})"
@@ -69,6 +70,7 @@ module Leaflet
         end
       output << "}).addTo(map)"
 
+      output << "}) (L);"
       output << "</script>"
       output.join("\n").html_safe
     end
