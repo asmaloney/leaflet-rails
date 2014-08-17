@@ -91,7 +91,7 @@ map(
 )
 ```
 
-If you specify both ```fit_to_markers``` and ```fitbounds``` on a map, the value of ```fitbounds``` will take precendence.
+If you specify both ```fit_to_markers``` and ```fitbounds``` on a map, the value of ```fitbounds``` will take precedence.
 
 Adding a `:popup` element to a marker hash will also generate a popup for a maker:
 
