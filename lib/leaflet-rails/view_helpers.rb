@@ -36,7 +36,17 @@ module Leaflet
       if options[:fit_to_markers] && options[:markers] && (options[:markers].count > 1)
         locations = options[:markers].collect { |m| [m[:latlng][0].to_f, m[:latlng][1].to_f]  }
 
-        output << "map.fitBounds( L.latLngBounds( #{locations} ) );"
+        output << "map.fitBounds( L.latLngBounds( #{locations} ), {"
+
+        if options[:fit_to_markers].is_a? Hash
+          padding = options[:fit_to_markers][:padding] 
+          output << "padding: [#{padding}, #{padding}]," if padding
+
+          max_zoom = options[:fit_to_markers][:max_zoom]
+          output << "maxZoom: #{max_zoom}," if max_zoom
+        end
+
+        output << "} );"
       end
 
       if options[:circles]

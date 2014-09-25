@@ -91,6 +91,25 @@ map(
 )
 ```
 
+For more control over ```fit_to_markers```, it supports two options:
+
+* ```max_zoom``` will set the max zoom level when fitting markers
+* ```padding``` sets the padding when calculating the bounds
+
+They are passed in a hash like this:
+
+```ruby
+map(
+  markers: [
+     {
+       latlng: [51.52238797921441, -0.08366235665359283],
+       popup: 'Hello!'
+     }
+  ].
+  fit_to_markers: { padding: 50, max_zoom: 18 }
+)
+```
+
 If you specify both ```fit_to_markers``` and ```fitbounds``` on a map, the value of ```fitbounds``` will take precedence.
 
 Adding a `:popup` element to a marker hash will also generate a popup for a maker:
