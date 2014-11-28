@@ -35,6 +35,17 @@ If you are using Rails 4.1+ you will need to open your application-wide CSS file
 //= depend_on_asset "layers-2x.png"
 ```
 
+
+Version Parity
+==============
+
+leaflet-rails tries to keep version parity with leaflet.js. However, this isn't possible in all cases. Discrepancies have been noted below.
+
+| leaflet-rails  | leaflet.js | Reason |
+| ------------- | ------------- | ------|
+| 0.7.4  | 0.7.3  | Requested in #33 because of large gap between master and rubygems.org.|
+
+
 Helpers
 =======
 
@@ -56,12 +67,10 @@ Leaflet.subdomains = ['otile1', 'otile2', 'otile3', 'otile4']
 
 You will then be able to call the ```#map``` helper method in a view, and make sure that the helper method is inside an erb tag like so:
 ```ruby
-<div id="map">
-  <%= map(:center => {
-    :latlng => [51.52238797921441, -0.08366235665359283],
-    :zoom => 18
-  }) %>
-</div>
+<%= map(:center => {
+  :latlng => [51.52238797921441, -0.08366235665359283],
+  :zoom => 18
+}) %>
 ```
 
 You can also add any number of markers like so:
