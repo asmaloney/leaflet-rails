@@ -164,6 +164,29 @@ map(:container_id => "second_map", :center => {
 })
 ```
 
+To defer map loading, you may specify a function name and it will assign the function so you can call it whenever you need to.
+
+```ruby
+map( container_id: 'first_map', function_name: 'loadMap',
+    center: { latlng: [51.52238797921441, -0.08366235665359283] }
+    )
+```
+
+This will produce the following javascript:
+
+```javascript
+function loadMap( L ) {
+var map = L.map('first_map'), marker
+map.setView([51.52238797921441, -0.08366235665359283], )
+L.tileLayer(
+  ...
+}).addTo(map)
+};
+```
+
+This allows you to call the *loadMap* function whenver you want to load the map.
+
+
 Awesome Markers
 =======
 
