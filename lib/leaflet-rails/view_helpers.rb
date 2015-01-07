@@ -2,11 +2,15 @@ module Leaflet
   module ViewHelpers
 
     def map(options)
-      options[:tile_layer] ||= Leaflet.tile_layer
-      options[:attribution] ||= Leaflet.attribution
-      options[:max_zoom] ||= Leaflet.max_zoom
-      options[:subdomains] ||= Leaflet.subdomains
-      options[:container_id] ||= 'map'
+      defaults = {
+        tile_layer: Leaflet.tile_layer,
+        attribution: Leaflet.attribution,
+        max_zoom: Leaflet.max_zoom,
+        subdomains: Leaflet.subdomains,
+        container_id: 'map'
+      }
+
+      options = defaults.merge( options )
 
       output = []
       output << "<div id='#{options[:container_id]}'></div>" unless options[:no_container]
@@ -97,24 +101,30 @@ module Leaflet
     end
 
     def prep_icon_settings(settings)
-      settings[:name] = 'icon' if settings[:name].nil? or settings[:name].blank?
-      settings[:shadow_url] = '' if settings[:shadow_url].nil?
-      settings[:icon_size] = [] if settings[:icon_size].nil?
-      settings[:shadow_size] = [] if settings[:shadow_size].nil?
-      settings[:icon_anchor] = [0, 0] if settings[:icon_anchor].nil?
-      settings[:shadow_anchor] = [0, 0] if settings[:shadow_anchor].nil?
-      settings[:popup_anchor] = [0, 0] if settings[:popup_anchor].nil?
-      return settings
+      defaults = {
+        name: 'icon',
+        shadow_url: '',
+        icon_size: [],
+        shadow_size: [],
+        icon_anchor: [0, 0],
+        shadow_anchor: [0, 0],
+        popup_anchor: [0, 0]
+      }
+
+      defaults.merge( settings )
     end
 
     def prep_awesome_marker_settings(settings)
-      settings[:name] = 'home' if settings[:name].blank? #icon name, corresponds to 'icon' option in awesomeMarker
-      settings[:prefix] = 'glyphicon' if settings[:prefix].blank? #'fa' for font-awesome or 'glyphicon' for bootstrap 3
-      settings[:marker_color] = 'blue' if settings[:marker_color].blank? # 'red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'
-      settings[:icon_color] = 'white' if settings[:icon_color].blank? #'white'	'white', 'black' or css code (hex, rgba etc)
-      settings[:spin] = 'false' if settings[:spin].nil? #Make the icon spin 'true' or 'false'. Font-awesome required
-      settings[:extra_classes] = '' #Allow additional custom configuration.
-      return settings
+      defaults = {
+        name: 'home',         # icon name, corresponds to 'icon' option in awesomeMarker
+        prefix: 'glyphicon',  # 'fa' for font-awesome or 'glyphicon' for bootstrap 3
+        marker_color: 'blue', # 'red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'
+        icon_color: 'white',  # 'white'  'white', 'black' or css code (hex, rgba etc)
+        spin: false,          # Make the icon spin 'true' or 'false'. Font-awesome required
+        extra_classes: ''     # Allow additional custom configuration.
+      }
+
+      defaults.merge( settings )
     end
 
   end
