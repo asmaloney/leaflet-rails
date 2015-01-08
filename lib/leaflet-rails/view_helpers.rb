@@ -95,6 +95,7 @@ module Leaflet
       output << "}).addTo(map)"
 
       if options[:function_name]
+        output << 'return map;'
         output << '};'
       else
         output << '}) (L);'
